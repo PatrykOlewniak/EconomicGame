@@ -1,0 +1,25 @@
+from database import *
+from datetime import datetime
+
+
+
+class Player:
+    def __init__(self, name, surname, mail):
+        self.name = name
+        self.surname = surname
+        self.mail = mail
+        self.bornInDB() #do poprawienia wywolanie argumentow, bez potrzeby jak sa przy init
+        print("The new player : CREATED !")
+
+    def bornInDB(self):
+        new_player = PlayerDB(name=self.name,surname=self.surname, email=self.mail,startGameDate=datetime.now())
+        insertert_to_DB(new_player)
+
+
+
+
+kasia0= Player("Kasia","jakasTam", "thawar@gm0ail.com")
+
+class Job:
+    def show_availble_jobs(self):
+        pass
