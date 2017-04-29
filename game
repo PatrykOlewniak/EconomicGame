@@ -13,12 +13,21 @@ class Player:
 
     def bornInDB(self):
         new_player = PlayerDB(name=self.name,surname=self.surname, email=self.mail,startGameDate=datetime.now())
-        insertert_to_DB(new_player)
+        insert_to_DB(new_player)
 
 
+    def getRandomJob(self):
+        pass
 
 
-kasia0= Player("Kasia","jakasTam", "thawar@gm0ail.com")
+#kasia0= Player("Kasia","jakasTam", "thawar@gm0ail.com")
+
+#create_DB('economicGameDB.db')
+
+#create_new_job("First job in Butchery",2800,8)
+
+print (list_of_avaible_jobs())
+
 
 class Job:
     def show_availble_jobs(self):
