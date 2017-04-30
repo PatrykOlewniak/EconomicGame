@@ -84,7 +84,7 @@ def create_new_job(jobName,salary, shift):
     insert_to_DB(newJob)
 
 
-def list_of_avaible_jobs(minSalary=0,maxSalary=999999):
+def list_of_avaible_jobs(minSalary=0,maxSalary=9999999):
     """
     Function wich show list of avaible jobs with selected salary
     
@@ -92,8 +92,7 @@ def list_of_avaible_jobs(minSalary=0,maxSalary=999999):
     :param maxSalary: last arg in range (includes)
     :return: list of tuples (jobIB,name,salary,shift) 
     """
-
-    jobList=[]
+    jobList = []
     session = open_session()
     s = select([JobDB]).where(JobDB.salary.between(minSalary,maxSalary))
     # s= select([PlayerDB.nme])
