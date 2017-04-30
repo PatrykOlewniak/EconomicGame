@@ -20,17 +20,19 @@ class Playground:
 
 
 Patryk = Player("Patryk","Olewniak","Thavar", "thawar@gmail.com")
+Kasia= Player("Kasia", "Kasinska", "Kasiulek883","K@sia@gmail.com")
+Kasia.born_in_DB()
 #Patryk.born_in_DB()
 print (Patryk.get_balance_value_from_DB())
-#ania3=Player("Ania","Kundzia","an99iaa@gmail.com")
-#print (ania3.get_random_job())
-#job1=Job
+#print(Patryk.get_ID_of_Player())
+#Patryk.set_random_first_job()
+
 
 #job1.assign_job_to_Player(2,2,"2000-10-10")
 #print(job1.list_of_avaible_jobs())
 
 #kasia0= Player("Kasia","jakasTam", "thawar@gm0ail.com")
 
-create_DB('economicGameDB.db')
+#create_DB('economicGameDB.db')
 
-#create_new_job("First job in Butchery",2800,8)
+#Job.create_new_job("First job in Office",2600,7)

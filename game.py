@@ -2,6 +2,8 @@ from datetime import datetime, date
 from database import *
 import random
 
+from database import PlayerDB
+
 
 class Player:
     def __init__ (self, name, surname, nickname, mail):
@@ -9,9 +11,10 @@ class Player:
         self.surname = surname
         self.nickname = nickname
         self.mail = mail
+        self.id = id
 
     def born_in_DB (self):
-        """IntegrityError
+        """
         creates the new player in database with values took on init
         Player gain new job on begining. Random one from begining job list
         """
@@ -22,14 +25,45 @@ class Player:
                               startGameDate=datetime.now())
         insert_to_DB(new_player)
 
-    def get_random_job (self):
+
+    def get_ID_of_Player(self):
+        query = select([PlayerDB.playerID]).where(PlayerDB.nickname==self.nickname)
+        session = open_session()
+        result = session.execute(query)
+        playerDB_ID = result.fetchone()[0]
+        return playerDB_ID
+
+
+
+    def get_random_first_job(self):
         """
         Method shuffle one job from begining jobs (paid 2500-3200$)
         :return: jobID
         """
         basicJobList = Job.list_of_avaible_jobs(2500, 3200)
-        randomJob = random.choice(basicJobList)
-        return randomJob[0]
+        if (len(basicJobList)>0):
+            randomJob = random.choice(basicJobList)
+            return randomJob[0]
+        else:
+            raise ValueError('could not find any random jobs')
+
+    def set_random_first_job(self):
+        """
+        sets random first job in table "timeofjobs" where creates
+        the assignation job to the player 
+        uses the two methods results as argument : get_random_firstjob()
+        and get_ID_of_Player()
+        """
+        try:
+            randomJobID = self.get_random_first_job()
+            playerID = self.get_ID_of_Player()
+            Job.assign_job_to_Player(randomJobID,
+                                     playerID,
+                                 expirationDate= "2020-10-10",
+                                 startDate=datetime.now())
+        except ValueError:
+            print("Can't set the random first job")
+
 
     def get_balance_value_from_DB(self):
         """
@@ -42,7 +76,8 @@ class Player:
         balanceDBValue=result.fetchone()[0]
         return balanceDBValue
 
-
+    def get_total_balance(self):
+        pass
 
 
 class Job:
@@ -61,7 +96,7 @@ class Job:
         Uses the open session method
         :param minSalary: first arg of range (includes)
         :param maxSalary: last arg in range (includes)
-        :return: list of tuples (jobIB,name,salary,shift) 
+        :return: list of tuples (jobIB,name,salary,shift) if exist in range
         """
         jobList = []
         session = open_session()
@@ -71,7 +106,11 @@ class Job:
             jobList.append(row)
         return jobList
 
-    def assign_job_to_Player (jobID, playerID, expirationDate, startDate=datetime.now()):
+
+    def assign_job_to_Player(jobID,
+                              playerID,
+                              expirationDate,
+                              startDate=datetime.now()):
         """
         Admin Function which assign existed player with existed job 
         :param playerID
