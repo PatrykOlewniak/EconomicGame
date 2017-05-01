@@ -33,8 +33,6 @@ class Player:
         playerDB_ID = result.fetchone()[0]
         return playerDB_ID
 
-
-
     def get_random_first_job(self):
         """
         Method shuffle one job from begining jobs (paid 2500-3200$)
@@ -76,9 +74,19 @@ class Player:
         balanceDBValue=result.fetchone()[0]
         return balanceDBValue
 
-    def get_total_balance(self):
-        pass
-
+    def get_list_of_player_jobs(self):
+        """
+        List o all player jobs from his game begining
+        :return: Full list of player jobs. [jobID,startDate,endDate] 
+        """
+        jobList=[]
+        actualPlayerID=self.get_ID_of_Player()
+        session = open_session()
+        query = select([TimeOfJobsDB.jobID,TimeOfJobsDB.startDate,TimeOfJobsDB.endDate]).where(TimeOfJobsDB.jobID == actualPlayerID)
+        result = session.execute(query)
+        for k in result:
+            jobList.append(k)
+        return jobList
 
 class Job:
     def create_new_job (jobName, salary, shift):
@@ -127,3 +135,20 @@ class Job:
             insert_to_DB(newTimeOfJobInstance)
         except IntegrityError:
             print("Sorry, can't do that.")
+
+    def get_salary_amount(jobID):
+        query = select([JobDB.salary]).where(JobDB.jobID==jobID)
+        session = open_session()
+        result = session.execute(query)
+        salaryDBValue=result.fetchone()[0]
+        return salaryDBValue
+
+    def get_shift_time(jobID):
+        query = select([JobDB.shift]).where(JobDB.jobID==jobID)
+        session = open_session()
+        result = session.execute(query)
+        shiftDBValue=result.fetchone()[0]
+        return shiftDBValue
+
+
+

@@ -1,5 +1,6 @@
 from game import Player, Job
 from database import create_DB
+from incomeCalculator import *
 
 class Playground:
     def init_message(self):
@@ -20,10 +21,16 @@ class Playground:
 
 
 Patryk = Player("Patryk","Olewniak","Thavar", "thawar@gmail.com")
-Kasia= Player("Kasia", "Kasinska", "Kasiulek883","K@sia@gmail.com")
-Kasia.born_in_DB()
+#Kasia= Player("Kasia", "Kasinska", "Kasiulek883","K@sia@gmail.com")
+#Kasia.born_in_DB()
 #Patryk.born_in_DB()
 print (Patryk.get_balance_value_from_DB())
+print (Patryk.get_list_of_player_jobs())
+print (Job.get_salary_amount(1))
+print (Job.get_shift_time(1))
+PatrykCalculations=IncomeCalculations()
+print(PatrykCalculations.incomeInPeriod(Job.get_salary_amount(1),Job.get_shift_time(1),
+               Patryk.get_list_of_player_jobs()[0][1],Patryk.get_list_of_player_jobs()[0][2]))
 #print(Patryk.get_ID_of_Player())
 #Patryk.set_random_first_job()
 
