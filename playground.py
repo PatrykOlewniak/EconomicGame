@@ -19,8 +19,7 @@ class Playground:
                 print("Your balance = %s"%balance)
                 identification = True
 
-
-            else:
+            elif (answer1.lower()=="yes"):
                 name = input("Would you like to tell me your name?\n")
                 print(('Great! Nice to meet you %s, tell me now your surname. ')%(name))
                 surname = input()
@@ -31,6 +30,9 @@ class Playground:
                 newPlayer.born_in_DB()
                 newPlayer.set_random_first_job()
                 identification = True
+
+            else: print("Im not sure what can we do now. I'll ask again...")
+
 
     def assign_nickname_to_Player(self,nickname):
         pass
