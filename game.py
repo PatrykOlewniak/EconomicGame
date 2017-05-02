@@ -25,27 +25,26 @@ class Player:
                               startGameDate=datetime.now())
         insert_to_DB(new_player)
 
-
-    def get_ID_of_Player(self):
-        query = select([PlayerDB.playerID]).where(PlayerDB.nickname==self.nickname)
+    def get_ID_of_Player (self):
+        query = select([PlayerDB.playerID]).where(PlayerDB.nickname == self.nickname)
         session = open_session()
         result = session.execute(query)
         playerDB_ID = result.fetchone()[0]
         return playerDB_ID
 
-    def get_random_first_job(self):
+    def get_random_first_job (self):
         """
         Method shuffle one job from begining jobs (paid 2500-3200$)
         :return: jobID
         """
         basicJobList = Job.list_of_avaible_jobs(2500, 3200)
-        if (len(basicJobList)>0):
+        if (len(basicJobList) > 0):
             randomJob = random.choice(basicJobList)
             return randomJob[0]
         else:
             raise ValueError('could not find any random jobs')
 
-    def set_random_first_job(self):
+    def set_random_first_job (self):
         """
         sets random first job in table "timeofjobs" where creates
         the assignation job to the player 
@@ -57,36 +56,37 @@ class Player:
             playerID = self.get_ID_of_Player()
             Job.assign_job_to_Player(randomJobID,
                                      playerID,
-                                 expirationDate= "2020-10-10",
-                                 startDate=datetime.now())
+                                     expirationDate="2020-10-10",
+                                     startDate=datetime.now())
         except ValueError:
             print("Can't set the random first job")
 
-
-    def get_balance_value_from_DB(self):
+    def get_balance_value_from_DB (self):
         """
         Using session and query to get the value of balance in database
         :return: balance amount from PlayerDB.balance
         """
-        query = select([PlayerDB.balance]).where(PlayerDB.nickname=="Thavar")
+        query = select([PlayerDB.balance]).where(PlayerDB.nickname == "Thavar")
         session = open_session()
         result = session.execute(query)
-        balanceDBValue=result.fetchone()[0]
+        balanceDBValue = result.fetchone()[0]
         return balanceDBValue
 
-    def get_list_of_player_jobs(self):
+    def get_list_of_player_jobs (self):
         """
         List o all player jobs from his game begining
         :return: Full list of player jobs. [jobID,startDate,endDate] 
         """
-        jobList=[]
-        actualPlayerID=self.get_ID_of_Player()
+        jobList = []
+        actualPlayerID = self.get_ID_of_Player()
         session = open_session()
-        query = select([TimeOfJobsDB.jobID,TimeOfJobsDB.startDate,TimeOfJobsDB.endDate]).where(TimeOfJobsDB.jobID == actualPlayerID)
+        query = select([TimeOfJobsDB.jobID, TimeOfJobsDB.startDate, TimeOfJobsDB.endDate]).where(
+            TimeOfJobsDB.jobID == actualPlayerID)
         result = session.execute(query)
         for k in result:
             jobList.append(k)
         return jobList
+
 
 class Job:
     def create_new_job (jobName, salary, shift):
@@ -114,8 +114,7 @@ class Job:
             jobList.append(row)
         return jobList
 
-
-    def assign_job_to_Player(jobID,
+    def assign_job_to_Player (jobID,
                               playerID,
                               expirationDate,
                               startDate=datetime.now()):
@@ -136,19 +135,24 @@ class Job:
         except IntegrityError:
             print("Sorry, can't do that.")
 
-    def get_salary_amount(jobID):
-        query = select([JobDB.salary]).where(JobDB.jobID==jobID)
+    def get_salary_amount (jobID):
+        """
+        Select from DB and returns the salary amount for input jobID
+        :return: salary amount (per month)
+        """
+        query = select([JobDB.salary]).where(JobDB.jobID == jobID)
         session = open_session()
         result = session.execute(query)
-        salaryDBValue=result.fetchone()[0]
+        salaryDBValue = result.fetchone()[0]
         return salaryDBValue
 
-    def get_shift_time(jobID):
-        query = select([JobDB.shift]).where(JobDB.jobID==jobID)
+    def get_shift_time (jobID):
+        """
+        Select from DB and returns the shift value for input jobID
+        :return: shift value (int)
+        """
+        query = select([JobDB.shift]).where(JobDB.jobID == jobID)
         session = open_session()
         result = session.execute(query)
-        shiftDBValue=result.fetchone()[0]
+        shiftDBValue = result.fetchone()[0]
         return shiftDBValue
-
-
-
