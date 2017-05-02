@@ -32,6 +32,21 @@ class Player:
         playerDB_ID = result.fetchone()[0]
         return playerDB_ID
 
+    @staticmethod
+    def get_player_evidence(_nickname):
+        """
+        static method for obtaining information about player by the nickname
+        :param _nickname: nickname of the infos searching player
+        :return: tuple (playerID, name, surname, email)
+        """
+        playerEvidence=[]
+        query = select([PlayerDB.playerID,PlayerDB.name, PlayerDB.surname, PlayerDB.email]).where(PlayerDB.nickname == _nickname)
+        session = open_session()
+        result = session.execute(query)
+        return result.fetchone()
+
+
+
     def get_random_first_job (self):
         """
         Method shuffle one job from begining jobs (paid 2500-3200$)
@@ -66,7 +81,7 @@ class Player:
         Using session and query to get the value of balance in database
         :return: balance amount from PlayerDB.balance
         """
-        query = select([PlayerDB.balance]).where(PlayerDB.nickname == "Thavar")
+        query = select([PlayerDB.balance]).where(PlayerDB.nickname ==self.nickname )
         session = open_session()
         result = session.execute(query)
         balanceDBValue = result.fetchone()[0]

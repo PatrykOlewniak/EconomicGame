@@ -1,36 +1,38 @@
 from datetime import datetime
 
-secondsInMonth=2629744
-actualTime=datetime.now()
+
 
 class IncomeCalculations:
+    secondsInMonth = 2629744
+    actualTime = datetime.now()
 
-
-    def totalAmount(self,incomeList):
-        """zwraca sume zarobkow. Jako wejscie wymaga listy w formie [salaryPerMonth,startTime,EndTime]"""
-        totalIncome=0
-        for k in incomeList:
-            totalIncome+=self.incomeInPeriod(k[0],k[1],k[2])
-        return totalIncome
 
     def secondsCountFromDateToNow(self, startDate):
-        """Sekundy od startu do teraz"""
+        """seconds count from begining to now"""
         actualTime=datetime.now()
         return (actualTime - startDate).total_seconds()
 
     def incomeInPeriod(self,salaryPerMonth,shift,startTime,endTime):
-        """Zarobek do danej daty. Jesli data w przyszlosci to zwraca do teraz"""
+        """income in input period
+            if endTime before now - calculate the income between dates
+            but if endTime in future - calculates with time to now
+        :return: income from startTime to endTime if endTime in the past, else : to now
+        """
         secondsInMonth = 2629744
         _salaryPerSec=(salaryPerMonth*(shift/8))/secondsInMonth
 
-        if (endTime>datetime.now()): #unikniecie formatowania
+        if (endTime>datetime.now()):
             return  (_salaryPerSec* self.secondsCountFromDateToNow(startTime))
         else:
             return(_salaryPerSec * (endTime-startTime).total_seconds())
 
     def secondsCountFromDateToDate(self,FirstDate,SecondDate):
-        """Zwraca liczbe sekund od daty A do daty B"""
+        """
+        :param FirstDate: format datetime (year-mm-dd-...)
+        :param SecondDate: format datetime (year-mm-dd-...)
+        :return: seconds from date to date, if secondDate before FirstDate then return negative count
+        """
+        """seconds count from dateA to DateB"""
         return ((SecondDate- FirstDate).total_seconds())
-
 
 
