@@ -1,6 +1,8 @@
 from datetime import datetime, date
 from database import *
 import random
+from incomeCalculator import IncomeCalculations
+
 
 from database import PlayerDB
 
@@ -45,8 +47,6 @@ class Player:
         result = session.execute(query)
         return result.fetchone()
 
-
-
     def get_random_first_job (self):
         """
         Method shuffle one job from begining jobs (paid 2500-3200$)
@@ -76,6 +76,8 @@ class Player:
         except ValueError:
             print("Can't set the random first job")
 
+
+
     def get_balance_value_from_DB (self):
         """
         Using session and query to get the value of balance in database
@@ -96,11 +98,22 @@ class Player:
         actualPlayerID = self.get_ID_of_Player()
         session = open_session()
         query = select([TimeOfJobsDB.jobID, TimeOfJobsDB.startDate, TimeOfJobsDB.endDate]).where(
-            TimeOfJobsDB.jobID == actualPlayerID)
+            TimeOfJobsDB.playerID == actualPlayerID)
         result = session.execute(query)
         for k in result:
             jobList.append(k)
         return jobList
+
+    def total_Income(self):
+        playerID=self.get_ID_of_Player()
+        incomeCalc=IncomeCalculations()
+        incomeFromJob=(incomeCalc.incomeInPeriod(Job.get_salary_amount(playerID),
+                                                 Job.get_shift_time(playerID),
+                                                 self.get_list_of_player_jobs()[0][1],
+                                                 self.get_list_of_player_jobs()[0][2]))
+        summaryIncome = self.get_balance_value_from_DB() + incomeFromJob
+        return summaryIncome
+
 
 
 class Job:
@@ -150,6 +163,7 @@ class Job:
         except IntegrityError:
             print("Sorry, can't do that.")
 
+    @staticmethod
     def get_salary_amount (jobID):
         """
         Select from DB and returns the salary amount for input jobID
@@ -160,7 +174,7 @@ class Job:
         result = session.execute(query)
         salaryDBValue = result.fetchone()[0]
         return salaryDBValue
-
+    @staticmethod
     def get_shift_time (jobID):
         """
         Select from DB and returns the shift value for input jobID

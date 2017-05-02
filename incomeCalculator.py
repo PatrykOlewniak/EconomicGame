@@ -34,5 +34,3 @@ class IncomeCalculations:
         """
         """seconds count from dateA to DateB"""
         return ((SecondDate- FirstDate).total_seconds())
-
-
