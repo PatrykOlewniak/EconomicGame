@@ -126,6 +126,7 @@ class Job:
         newJob = JobDB(jobName=jobName, salary=salary, shift=shift)
         insert_to_DB(newJob)
 
+    @staticmethod
     def list_of_avaible_jobs (minSalary=0, maxSalary=9999999):
         """
         Function wich show list of avaible jobs with selected salary
