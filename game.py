@@ -3,7 +3,6 @@ from database import *
 import random
 from incomeCalculator import IncomeCalculations
 
-
 from database import PlayerDB
 
 
@@ -35,14 +34,15 @@ class Player:
         return playerDB_ID
 
     @staticmethod
-    def get_player_evidence(_nickname):
+    def get_player_evidence (_nickname):
         """
         static method for obtaining information about player by the nickname
         :param _nickname: nickname of the infos searching player
         :return: tuple (playerID, name, surname, email)
         """
-        playerEvidence=[]
-        query = select([PlayerDB.playerID,PlayerDB.name, PlayerDB.surname, PlayerDB.email]).where(PlayerDB.nickname == _nickname)
+        playerEvidence = []
+        query = select([PlayerDB.playerID, PlayerDB.name, PlayerDB.surname, PlayerDB.email]).where(
+            PlayerDB.nickname == _nickname)
         session = open_session()
         result = session.execute(query)
         return result.fetchone()
@@ -76,14 +76,12 @@ class Player:
         except ValueError:
             print("Can't set the random first job")
 
-
-
     def get_balance_value_from_DB (self):
         """
         Using session and query to get the value of balance in database
         :return: balance amount from PlayerDB.balance
         """
-        query = select([PlayerDB.balance]).where(PlayerDB.nickname ==self.nickname )
+        query = select([PlayerDB.balance]).where(PlayerDB.nickname == self.nickname)
         session = open_session()
         result = session.execute(query)
         balanceDBValue = result.fetchone()[0]
@@ -104,16 +102,15 @@ class Player:
             jobList.append(k)
         return jobList
 
-    def total_Income(self):
-        playerID=self.get_ID_of_Player()
-        incomeCalc=IncomeCalculations()
-        incomeFromJob=(incomeCalc.incomeInPeriod(Job.get_salary_amount(playerID),
-                                                 Job.get_shift_time(playerID),
-                                                 self.get_list_of_player_jobs()[0][1],
-                                                 self.get_list_of_player_jobs()[0][2]))
+    def total_Income (self):
+        playerID = self.get_ID_of_Player()
+        incomeCalc = IncomeCalculations()
+        incomeFromJob = (incomeCalc.incomeInPeriod(Job.get_salary_amount(playerID),
+                                                   Job.get_shift_time(playerID),
+                                                   self.get_list_of_player_jobs()[0][1],
+                                                   self.get_list_of_player_jobs()[0][2]))
         summaryIncome = self.get_balance_value_from_DB() + incomeFromJob
         return summaryIncome
-
 
 
 class Job:
@@ -175,6 +172,7 @@ class Job:
         result = session.execute(query)
         salaryDBValue = result.fetchone()[0]
         return salaryDBValue
+
     @staticmethod
     def get_shift_time (jobID):
         """
@@ -186,3 +184,27 @@ class Job:
         result = session.execute(query)
         shiftDBValue = result.fetchone()[0]
         return shiftDBValue
+
+
+class Assets:
+    """
+    Class of all properties avaible to buy or sell in game
+    """
+
+    def create_new_property (self, name, propertyValue):
+        """
+        Admin method for adding new property to DB
+        :param name: name of property
+        :param propertyValue: value of property
+        """
+        newProperty = PropertyDB(propertyName=name, value=propertyValue)
+        insert_to_DB(newProperty)
+
+    def get_list_of_assets_available (self):
+        assetList = []
+        session = open_session()
+        query = select([PropertyDB])
+        result = session.execute(query)
+        for row in result:
+            assetList.append(row)
+        return assetList
