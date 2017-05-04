@@ -1,4 +1,4 @@
-from game import Player, Job
+from game import Player, Job, Assets
 from database import create_DB, PlayerDB
 from incomeCalculator import IncomeCalculations
 from datetime import datetime
