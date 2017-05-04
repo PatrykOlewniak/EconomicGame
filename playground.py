@@ -2,7 +2,7 @@ from game import Player, Job, Assets
 from database import create_DB, PlayerDB
 from incomeCalculator import IncomeCalculations
 from datetime import datetime
-
+import re
 
 class Playground:
     def __init__ (self):
@@ -31,6 +31,11 @@ class Playground:
                 print(('Great! Nice to meet you %s, tell me now your surname. ') % (name))
                 surname = input()
                 mail = input("and your mail? \n")
+                match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',
+                                 mail)
+                if match == None:
+                    print('Error, wrong mail !')
+                    raise ValueError('Bad Mail Syntax')
                 nickname = input("last question : nickname?  \n")
                 print("Welcome %s %s vel %s in EconomicGame %s ! " % (name, surname, nickname, version))
                 newPlayer = Player(name, surname, nickname, mail)
